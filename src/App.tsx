@@ -64,7 +64,7 @@ function App() {
   return (
     <div className="container">
       <header>
-        <h1>사용자 인지 경로 정리</h1>
+        <h1>회원가입 인지 경로 조회</h1>
       </header>
 
       <main style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'minmax(250px, 300px) 1fr' }}>
