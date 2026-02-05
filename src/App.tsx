@@ -2,11 +2,14 @@ import { useState } from 'react';
 import * as XLSX from 'xlsx';
 import './index.css';
 import FileUpload from './components/FileUpload';
+import RedashForm from './components/RedashForm';
 import { processExcelFile, type ProcessedRow } from './utils/processor';
 
+type Tab = 'redash' | 'excel';
+
 function App() {
+  const [activeTab, setActiveTab] = useState<Tab>('redash');
   const [data, setData] = useState<ProcessedRow[] | null>(null);
-  // const [fileName, setFileName] = useState<string>(""); // Processed in file
   const [error, setError] = useState<string | null>(null);
 
   const handleFileUpload = async (file: File) => {
@@ -18,6 +21,14 @@ function App() {
       console.error("Error processing file:", err);
       setError("파일 처리 중 오류가 발생했습니다.");
     }
+  };
+
+  const handleRedashData = (fetchedData: ProcessedRow[]) => {
+    setData(fetchedData);
+  };
+
+  const handleError = (msg: string) => {
+    setError(msg);
   };
 
   const handleDownload = () => {
@@ -56,7 +67,7 @@ function App() {
         <h1>사용자 인지 경로 정리</h1>
       </header>
 
-      <main style={{ display: 'grid', gap: '2rem', gridTemplateColumns: '300px 1fr' }}>
+      <main style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'minmax(250px, 300px) 1fr' }}>
         <aside className="criteria-section card">
           <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--text-secondary)' }}>기준 항목 정보</h2>
           <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
@@ -67,9 +78,32 @@ function App() {
         </aside>
 
         <section className="content-section" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '150px', borderStyle: 'dashed' }}>
-            <FileUpload onUpload={handleFileUpload} />
-            {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
+
+          {/* Tab Navigation */}
+          <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+            <button
+              className={activeTab === 'redash' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => { setActiveTab('redash'); setError(null); setData(null); }}
+              style={{ padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', border: 'none', background: activeTab === 'redash' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'redash' ? '#fff' : 'var(--text-secondary)' }}
+            >
+              Redash 조회
+            </button>
+            <button
+              className={activeTab === 'excel' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => { setActiveTab('excel'); setError(null); setData(null); }}
+              style={{ padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', border: 'none', background: activeTab === 'excel' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'excel' ? '#fff' : 'var(--text-secondary)' }}
+            >
+              엑셀 업로드
+            </button>
+          </div>
+
+          <div className="card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '150px', borderStyle: activeTab === 'excel' ? 'dashed' : 'solid' }}>
+            {activeTab === 'redash' ? (
+              <RedashForm onDataFetched={handleRedashData} onError={handleError} />
+            ) : (
+              <FileUpload onUpload={handleFileUpload} />
+            )}
+            {error && <p style={{ color: '#ff6b6b', marginTop: '1rem', fontSize: '0.9rem' }}>{error}</p>}
           </div>
 
           <div className="card">
@@ -107,7 +141,7 @@ function App() {
                 </table>
               ) : (
                 <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                  파일을 업로드하면 결과가 표시됩니다.
+                  {activeTab === 'redash' ? '기간을 선택하고 조회 버튼을 눌러주세요.' : '파일을 업로드하면 결과가 표시됩니다.'}
                 </div>
               )}
             </div>
