@@ -46,12 +46,12 @@ const RedashForm = ({ onDataFetched, onError }: RedashFormProps) => {
     };
 
     const handleIconClick = (ref: React.RefObject<HTMLInputElement | null>) => {
-        if (ref.current) {
-            if ('showPicker' in ref.current) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                (ref.current as any).showPicker();
+        const input = ref.current;
+        if (input) {
+            if ('showPicker' in input && typeof input.showPicker === 'function') {
+                input.showPicker();
             } else {
-                ref.current.focus();
+                input.focus();
             }
         }
     };
