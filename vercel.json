@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/redash/:path*",
+            "destination": "https://dashboard.quebon.tv/api/:path*"
+        }
+    ]
+}
