@@ -22,7 +22,8 @@ export const KEYWORD_MAPPING: { keyword: string; target: string }[] = [
     { keyword: "기사", target: "언론기사" },
     { keyword: "카카오 라이브 쇼핑", target: "카쇼라" },
     { keyword: "네이버 라이브 쇼핑", target: "네쇼라" },
-    { keyword: "커넥터즈", target: "커넥터즈" },
+    { keyword: "커넥터즈 추천", target: "커넥터즈 추천" },
+    { keyword: "커넥터즈 신청", target: "커넥터즈 신청" },
     { keyword: "단원평가 pdf", target: "단원평가 PDF" },
     { keyword: "(광고)", target: "광고 합계" },
     { keyword: "광고", target: "광고 합계" },
@@ -57,6 +58,7 @@ export const SORT_ORDER = [
     "수학페스티벌",
     "광고 합계",
     // Detailed ad items (if we were producing them)
+    // ... (omitting ad details for brevity if not strictly needed in sort order, but keeping context)
     "(광고)라디오",
     "(광고)인스타그램",
     "(광고)유튜브",
@@ -72,7 +74,8 @@ export const SORT_ORDER = [
     "(광고)클래스팅",
     "카쇼라",
     "네쇼라",
-    "커넥터즈",
+    "커넥터즈 추천",
+    "커넥터즈 신청",
     "단원평가 PDF",
     "직접입력",
     "미입력"
